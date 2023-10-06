@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quiz By Rup</title>
+
+    <style>
+      * {
+        margin: 0;
+
+        padding: 0;
+
+        font-family: Arial, Helvetica, sans-serif;
+
+        box-sizing: border-box;
+      }
+
+      body {
+        background: #001e4d;
+      }
+
+      .app {
+        background: white;
+
+        width: 90%;
+
+        max-width: 600px;
+
+        margin: 100px auto 0;
+
+        border-radius: 10px;
+
+        padding: 30px;
+      }
+
+      .app h1 {
+        font-size: 25px;
+
+        color: #001e4d;
+
+        font-weight: 600;
+
+        padding-bottom: 30px;
+
+        border-bottom: 1px solid #333;
+      }
+
+      .quiz {
+        padding: 20px 0;
+      }
+
+      .quiz h2 {
+        font-size: 18px;
+
+        color: #001e4d;
+
+        font-weight: 600;
+      }
+
+      .btns {
+        background: white;
+
+        color: #222;
+
+        font-weight: 500;
+
+        width: 100%;
+
+        border: 1px solid #222;
+
+        padding: 10px;
+
+        margin: 10px 0;
+
+        text-align: left;
+
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        transition: all 0.3s;
+      }
+
+      .btns:hover:not([disabled]) {
+        background-color: aqua;
+        color: purple;
+      }
+
+      .btns:disabled {
+        cursor: no-drop;
+      }
+
+      #nextBTN {
+        background: #001e4d;
+
+        color: #fff;
+
+        font-weight: 500;
+
+        width: 150px;
+
+        border: 0;
+
+        padding: 10px;
+
+        margin: 20px auto 0;
+
+        border-radius: 5px;
+
+        cursor: pointer;
+
+        display: none;
+      }
+
+      .correct {
+        background: #9aeabc;
+      }
+
+      .incorrect {
+        background: #ff9393;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app">
+      <h1>Quiz Competition by Rupayan</h1>
+
+      <div class="quiz">
+        <h2 id="qn">The Question Goes Here</h2>
+
+        <div class="ansBTN">
+          <button class="btns">Option-1</button>
+
+          <button class="btns">Option-2</button>
+
+          <button class="btns">Option-3</button>
+
+          <button class="btns">Option-4</button>
+        </div>
+        <button id="nextBTN">Next</button>
+      </div>
+    </div>
+
+    <script>
+      let questions = [
+        {
+          question: "What is the most popular programming language in 2023?",
+
+          answers: [
+            { opt: "Python", correct: true },
+
+            { opt: "JavaScript", correct: false },
+
+            { opt: "C++", correct: false },
+
+            { opt: "Java", correct: false },
+          ],
+        },
+
+        {
+          question: "What is the most popular programming language for AI-ML?",
+
+          answers: [
+            { opt: "Python", correct: false },
+
+            { opt: "JavaScript", correct: true },
+
+            { opt: "C", correct: false },
+
+            { opt: "GoLang", correct: false },
+          ],
+        },
+
+        {
+          question: "What is the function used to read CSV files into R?",
+
+          answers: [
+            { opt: "Csv()", correct: false },
+
+            { opt: "Read.Csv()", correct: false },
+
+            { opt: "Read_Csv()", correct: false },
+
+            { opt: "B & C", correct: true },
+          ],
+        },
+      ];
+
+      let qn = document.getElementById("qn");
+
+      let ansBTN = document.querySelector(".ansBTN");
+
+      let nextBTN = document.getElementById("nextBTN");
+
+      let currentQuestionIndex = 0;
+
+      let score = 0;
+
+      function startQuiz() {
+        currentQuestionIndex = 0;
+        score = 0;
+
+        nextBTN.innerHTML = "Next";
+
+        showQuestion();
+      }
+
+      function showQuestion() {
+        resetState();
+
+        let currentQuestion = questions[currentQuestionIndex];
+
+        let QuestionNo = currentQuestionIndex + 1;
+
+        qn.innerHTML = QuestionNo + ". " + currentQuestion.question;
+
+        currentQuestion.answers.forEach((answers) => {
+          let button = document.createElement("button");
+
+          button.innerHTML = answers.opt;
+
+          button.classList.add("btns");
+
+          ansBTN.appendChild(button);
+
+          if (answers.correct) {
+            button.dataset.correct = answers.correct;
+          }
+
+          button.addEventListener("click", selectAnswer, false);
+        });
+      }
+
+      function resetState() {
+        nextBTN.style.display = "none";
+        while (ansBTN.firstChild) {
+          ansBTN.removeChild(ansBTN.firstChild);
+        }
+      }
+
+      function selectAnswer(e) {
+        let selectBtn = e.target;
+
+        let isCorrect = selectBtn.dataset.correct === "true";
+
+        if (isCorrect) {
+          selectBtn.classList.add("correct");
+
+          score++;
+        } else {
+          selectBtn.classList.add("incorrect");
+        }
+
+        Array.from(ansBTN.children).forEach((button) => {
+          if (button.dataset.correct === "true") {
+            button.classList.add("correct");
+          }
+
+          button.disabled = true;
+        });
+
+        nextBTN.style.display = "block";
+      }
+
+      function showScore() {
+        resetState();
+
+        qn.innerHTML = ` You scored ${score} out of ${questions.length} ! `;
+
+        nextBTN.innerHTML = "Play again";
+
+        nextBTN.style.display = "block";
+      }
+
+      function handleNextBtn() {
+        currentQuestionIndex++;
+
+        if (currentQuestionIndex < questions.length) {
+          showQuestion();
+        } else {
+          showScore();
+        }
+      }
+
+      nextBTN.addEventListener("click", function () {
+        if (currentQuestionIndex < questions.length) {
+          handleNextBtn();
+        } else {
+          startQuiz();
+        }
+      });
+
+      startQuiz();
+    </script>
+  </body>
+</html>
