@@ -292,6 +292,53 @@
       });
 
       startQuiz();
+
+            buttons.forEach((el) => {
+        el.addEventListener("click", (e) => {
+          if (e.target.id === "grey") {
+            todo.style.backgroundColor = e.target.id;
+
+            todoH2.style.color = "white";
+            locSave();
+          }
+
+          if (e.target.id === "white") {
+            todo.style.backgroundColor = e.target.id;
+
+            todoH2.style.color = "black";
+            locSave();
+          }
+
+          if (e.target.id === "orange") {
+            todo.style.backgroundColor = e.target.id;
+
+            todoH2.style.color = "white";
+            locSave();
+          }
+
+          if (e.target.id === "purple") {
+            todo.style.backgroundColor = e.target.id;
+            locSave();
+          }
+
+          if (e.target.id === "red") {
+            todo.style.backgroundColor = e.target.id;
+            locSave();
+          }
+
+          if (e.target.id === "lime") {
+            todo.style.backgroundColor = e.target.id;
+            locSave();
+          }
+
+          if (e.target.id === "brown") {
+            todo.style.backgroundColor = e.target.id;
+            locSave();
+          }
+        });
+      });
+
+      
     </script>
   </body>
 </html>
